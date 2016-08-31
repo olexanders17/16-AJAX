@@ -68,7 +68,7 @@ function Ajax(params) {
         connect(callback);
     }
 
-    this.resource = function (url,callback) {
+    this.resource = function (url, callback) {
         this.get(url).done(function (resp) {
 
             // console.log(resp.responseText);
@@ -86,11 +86,26 @@ function Ajax(params) {
 
 var ajax = new Ajax();
 
-var Users = ajax.resource('users2.json',function (resp) {
-    console.log(resp.responseText);
+/*
+var Users = ajax.resource('users2.json', function (resp) {
+
 
 });
 console.log('users', Users);
+*/
+
+
+var promise = new Promise(function (resolve, reject) {
+    var Users = ajax.resource('users2.json', function (resp) {
+        resolve(resp.responseText);
+    });
+
+})
+
+promise.than(function (resp) {
+
+})
+console.log(Users);
 
 
 
