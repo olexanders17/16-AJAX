@@ -6,6 +6,7 @@ function Ajax(params) {
     this.headers;
     this.callback;
     this.user;
+    this.id;
 
     this.output = [];
 
@@ -68,14 +69,21 @@ function Ajax(params) {
         connect(callback);
     }
 
-    this.resource = function (url, callback) {
-        this.get(url).done(function (resp) {
+    this.resource = function (url) {
+        this.url = url;
 
-            // console.log(resp.responseText);
-            //this.user =resp.responseText ;
-            callback(resp)
-        });
+        return this;
+    }
 
+    this.list = function () {
+        this.get(this.url);
+        return this;
+    }
+
+    this.getbyId = function (id) {
+        this.get(this.url);
+        this.id = id;
+        return this;
 
     }
 
@@ -84,28 +92,36 @@ function Ajax(params) {
 
 //----------------------------------
 
+/*var Users = ajax.resource('http://..../api/v1/users')
+ Users.list().done(function(users) { ... })
+ Users.get(id).done(function(user) { ... })
+ Users.get(id).done(function(user) { user.name = "other"; user.save().done()...; })*/
+
+
 var ajax = new Ajax();
 
+var Users = ajax.resource('users.json');
 /*
-var Users = ajax.resource('users2.json', function (resp) {
+/console.log("list of all users");
+ Users.list().done(function (users) {
+ console.log(users.responseText);
+ })
+ */
 
+console.log("det user by id and edit user");
+Users.getbyId(2).done(function (users) {
+    var user = JSON.parse(users.responseText)
+        .filter(e => e.index == Users.id)[0];
+    console.log(user);
+    user.index=100;
+    console.log(user);
 
 });
-console.log('users', Users);
-*/
 
 
-var promise = new Promise(function (resolve, reject) {
-    var Users = ajax.resource('users2.json', function (resp) {
-        resolve(resp.responseText);
-    });
 
-})
 
-promise.than(function (resp) {
 
-})
-console.log(Users);
 
 
 
